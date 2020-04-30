@@ -46,15 +46,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Architecture\Game.cs" />
-    <Compile Include="Architecture\TankCommand.cs" />
+    <Compile Include="Architecture\GameObjects\EnemyUpgraded.cs" />
+    <Compile Include="Architecture\GameObjects\PlayerUpgraded.cs" />
     <Compile Include="Architecture\ITank.cs" />
+    <Compile Include="Architecture\TankCommand.cs" />
+    <Compile Include="Architecture\IGameObject.cs" />
     <Compile Include="Architecture\TankMapCreator.cs" />
-    <Compile Include="Architecture\Tanks\Booster.cs" />
-    <Compile Include="Architecture\Tanks\Enemy.cs" />
-    <Compile Include="Architecture\Tanks\Player.cs" />
-    <Compile Include="Architecture\Tanks\Shell.cs" />
-    <Compile Include="Architecture\Tanks\Upgrade.cs" />
-    <Compile Include="Architecture\Tanks\Wall.cs" />
+    <Compile Include="Architecture\GameObjects\DoubleShell.cs" />
+    <Compile Include="Architecture\GameObjects\Enemy.cs" />
+    <Compile Include="Architecture\GameObjects\Player.cs" />
+    <Compile Include="Architecture\GameObjects\Shell.cs" />
+    <Compile Include="Architecture\GameObjects\Upgrade.cs" />
+    <Compile Include="Architecture\GameObjects\Wall.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

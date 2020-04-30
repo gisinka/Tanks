@@ -4,6 +4,6 @@
     {
         public int DeltaX;
         public int DeltaY;
-        public ITank TransformTo;
+        public IGameObject TransformTo;
     }
 }

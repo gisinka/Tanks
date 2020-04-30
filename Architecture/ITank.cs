@@ -1,10 +1,6 @@
 ﻿namespace Tanks.Architecture
 {
-    public interface ITank
+    internal interface ITank : IGameObject
     {
-        string GetImageFileName();
-        int GetDrawingPriority();
-        TankCommand Act(int x, int y);
-        bool DeadInConflict(ITank conflictedObject);
     }
 }

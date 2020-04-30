@@ -1,7 +1,11 @@
-﻿namespace Tanks.Architecture.Tanks
+﻿using System.Drawing;
+
+namespace Tanks.Architecture.GameObjects
 {
-    internal class Wall : ITank
+    internal class Wall : IGameObject
     {
+        public Point Orientation { get; set; }
+
         public string GetImageFileName()
         {
             return "Wall.png";
@@ -17,7 +21,7 @@
             return new TankCommand();
         }
 
-        public bool DeadInConflict(ITank conflictedObject)
+        public bool DeadInConflict(IGameObject conflictedObject)
         {
             return conflictedObject is Shell;
         }
