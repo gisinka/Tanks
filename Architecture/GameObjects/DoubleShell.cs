@@ -20,15 +20,10 @@ namespace Tanks.Architecture.GameObjects
 
         public override TankCommand Act(int x, int y)
         {
-            var command = new TankCommand {DeltaX = Orientation.X, DeltaY = Orientation.Y};
+            var command = new TankCommand {DeltaX = Orientation.X, DeltaY = Orientation.Y, TransformTo = this};
             if (Game.Map[x + Orientation.X, y + Orientation.Y] != null)
                 command.TransformTo = new Shell(Orientation);
             return command;
-        }
-
-        public override bool DeadInConflict(IGameObject conflictedObject)
-        {
-            return conflictedObject is DoubleShell;
         }
     }
 }

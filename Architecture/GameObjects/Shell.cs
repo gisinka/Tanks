@@ -30,11 +30,12 @@ namespace Tanks.Architecture.GameObjects
             if (!IsAbleToStep(x + Orientation.X, y + Orientation.Y)) return null;
             command.DeltaX = Orientation.X;
             command.DeltaY = Orientation.Y;
+            command.TransformTo = this;
             return command;
 
         }
 
-        public virtual bool DeadInConflict(IGameObject conflictedObject)
+        public bool DeadInConflict(IGameObject conflictedObject)
         {
             return conflictedObject != null;
         }
