@@ -65,9 +65,9 @@
     <Compile Include="Architecture\GameObjects\Shell.cs" />
     <Compile Include="Architecture\GameObjects\Upgrade.cs" />
     <Compile Include="Architecture\GameObjects\Wall.cs" />
-    <Compile Include="Architecture\TanksShould.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TanksShould.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
