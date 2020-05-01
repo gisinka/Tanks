@@ -1,9 +1,9 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using NUnit.Framework;
+using Tanks.Architecture;
 using Tanks.Architecture.GameObjects;
 
-namespace Tanks.Architecture
+namespace Tanks
 {
     [TestFixture]
     internal static class TanksShould
