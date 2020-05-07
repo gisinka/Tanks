@@ -13,6 +13,7 @@ namespace Tanks.Architecture.GameObjects
         {
             Orientation = orientation;
         }
+
         public override string GetImageFileName()
         {
             return "DoubleShell.png";

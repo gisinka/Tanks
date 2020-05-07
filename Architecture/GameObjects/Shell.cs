@@ -33,12 +33,12 @@ namespace Tanks.Architecture.GameObjects
 
         }
 
-        public bool DeadInConflict(IGameObject conflictedObject)
+        public virtual bool DeadInConflict(IGameObject conflictedObject)
         {
             return conflictedObject != null;
         }
 
-        protected bool IsAbleToStep(int x, int y)
+        private static bool IsAbleToStep(int x, int y)
         {
             return x > -1 && y > -1 && x < Game.MapWidth && y < Game.MapHeight;
         }
