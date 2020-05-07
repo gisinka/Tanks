@@ -38,6 +38,7 @@ EW
 
         private static void DoActions()
         {
+            for (var i = 0; i < 2; i++)
             for (var x = 0; x < Game.MapWidth; x++)
             for (var y = 0; y < Game.MapHeight; y++)
             {
@@ -60,7 +61,8 @@ EW
 
                 if (command.CreateTo != null && command.CreateTo.Orientation != new Point(0, 0) &&
                     Game.IsInMap(x + command.CreateTo.Orientation.X, y + command.CreateTo.Orientation.Y))
-                    Game.Map[x + command.CreateTo.Orientation.X, y + command.CreateTo.Orientation.Y] = command.CreateTo;
+                    Game.Map[x + command.CreateTo.Orientation.X, y + command.CreateTo.Orientation.Y] =
+                        command.CreateTo;
             }
         }
 
@@ -68,8 +70,7 @@ EW
         public static void KillingTest()
         {
             Game.CreateMap(MapWithEnemyShell);
-            for (var i = 0; i < 2; i++)
-                DoActions();
+            DoActions();
             Assert.AreEqual(true, Game.Map[0, 2] == null);
         }
 
@@ -77,8 +78,7 @@ EW
         public static void RidingTest()
         {
             Game.CreateMap(MapWithEnemy);
-            for (var i = 0; i < 2; i++)
-                DoActions();
+            DoActions();
             Assert.AreEqual(true, Game.Map[2, 0] is Enemy);
         }
 
@@ -86,8 +86,7 @@ EW
         public static void ShootingTest()
         {
             Game.CreateMap(MapWithPlayerEnemy);
-            for (var i = 0; i < 2; i++)
-                DoActions();
+            DoActions();
             Assert.AreEqual(true, Game.Map[2, 0] is Shell);
         }
 
@@ -95,8 +94,7 @@ EW
         public static void UpgradedShootingTest()
         {
             Game.CreateMap(MapWithPlayerUpgradedEnemy);
-            for (var i = 0; i < 2; i++)
-                DoActions();
+            DoActions();
             Assert.AreEqual(true, Game.Map[2, 0] is DoubleShell);
         }
 
@@ -104,8 +102,7 @@ EW
         public static void UpgradeTest()
         {
             Game.CreateMap(MapWithUpgradeEnemy);
-            for (var i = 0; i < 2; i++)
-                DoActions();
+            DoActions();
             Assert.AreEqual(true, Game.Map[2, 0] is EnemyUpgraded);
         }
 
@@ -113,8 +110,7 @@ EW
         public static void WallTest()
         {
             Game.CreateMap(MapWithWallEnemy);
-            for (var i = 0; i < 2; i++)
-                DoActions();
+            DoActions();
             Assert.AreEqual(true, Game.Map[0, 0] is Enemy);
         }
     }
