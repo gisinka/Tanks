@@ -2,7 +2,7 @@
 
 namespace Tanks.Architecture.GameObjects
 {
-    class Upgrade : IGameObject
+    public class Upgrade : IGameObject
     {
         public Point Orientation { get; set; }
 
@@ -25,11 +25,11 @@ namespace Tanks.Architecture.GameObjects
         {
             if (conflictedObject is Player)
             {
-                conflictedObject = new PlayerUpgraded() {Orientation = conflictedObject.Orientation};
+                conflictedObject = new PlayerUpgraded(conflictedObject.Orientation);
             }
             if (conflictedObject is Enemy)
             {
-                conflictedObject = new EnemyUpgraded() { Orientation = conflictedObject.Orientation };
+                conflictedObject = new EnemyUpgraded(conflictedObject.Orientation);
             }
             return conflictedObject != null;
         }

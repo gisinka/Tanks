@@ -26,11 +26,9 @@ namespace Tanks.Architecture.GameObjects
 
         public virtual TankCommand Act(int x, int y)
         {
-            var command = new TankCommand();
-            if (!IsAbleToStep(x + Orientation.X, y + Orientation.Y)) return null;
-            command.DeltaX = Orientation.X;
-            command.DeltaY = Orientation.Y;
-            command.TransformTo = this;
+            var command = new TankCommand {DeltaX = Orientation.X, DeltaY = Orientation.Y, TransformTo = this};
+            if (!IsAbleToStep(x + Orientation.X, y + Orientation.Y))
+                command.TransformTo = null;
             return command;
 
         }
@@ -40,7 +38,7 @@ namespace Tanks.Architecture.GameObjects
             return conflictedObject != null;
         }
 
-        private bool IsAbleToStep(int x, int y)
+        protected bool IsAbleToStep(int x, int y)
         {
             return x > -1 && y > -1 && x < Game.MapWidth && y < Game.MapHeight;
         }

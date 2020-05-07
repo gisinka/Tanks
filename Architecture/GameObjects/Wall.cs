@@ -2,7 +2,7 @@
 
 namespace Tanks.Architecture.GameObjects
 {
-    internal class Wall : IGameObject
+    public class Wall : IGameObject
     {
         public Point Orientation { get; set; }
 

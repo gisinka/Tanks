@@ -6,7 +6,7 @@ namespace Tanks.Architecture.GameObjects
     {
         public override string GetImageFileName()
         {
-            return "Enemy.jpg";
+            return "Enemy.png";
         }
 
         public override int GetDrawingPriority()
@@ -20,11 +20,14 @@ namespace Tanks.Architecture.GameObjects
             var coords = FindPlayer(x, y);
             if (coords != new Point(-1, -1))
             {
-                var correctOrientation = FindCorrectOrientation(new Point(x, y), coords);
-                if (correctOrientation == Orientation)
+                var correctOrientation = new Point
                 {
-                    command.CreateTo = new Shell(Orientation);
-                }
+                    X = CalculateAxisDirection(x, coords.X),
+                    Y = CalculateAxisDirection(y, coords.Y)
+                };
+                if (correctOrientation == Orientation &&
+                    IsAbleToStep(x + correctOrientation.X, y + correctOrientation.Y))
+                    command.CreateTo = Game.Shells[GetType()](Orientation);
                 else
                     Orientation = correctOrientation;
             }
@@ -35,6 +38,8 @@ namespace Tanks.Architecture.GameObjects
                     command.DeltaX = Orientation.X;
                     command.DeltaY = Orientation.Y;
                     command.TransformTo = this;
+                    if (Game.Map[x + Orientation.X, y + Orientation.Y] is Upgrade)
+                        command.TransformTo = new EnemyUpgraded(Orientation);
                 }
                 else
                 {
@@ -70,7 +75,7 @@ namespace Tanks.Architecture.GameObjects
 
             for (var i = y; i < Game.MapHeight; i++)
             {
-                if (Game.Map[x, i] is Wall || Game.Map[i, y] is Shell)
+                if (Game.Map[x, i] is Wall || Game.Map[x, i] is Shell)
                     break;
                 if (Game.Map[x, i] is Player)
                     return new Point(x, i);
@@ -78,7 +83,7 @@ namespace Tanks.Architecture.GameObjects
 
             for (var i = y; i > -1; i--)
             {
-                if (Game.Map[x, i] is Wall || Game.Map[i, y] is Shell)
+                if (Game.Map[x, i] is Wall || Game.Map[x, i] is Shell)
                     break;
                 if (Game.Map[x, i] is Player)
                     return new Point(x, i);
@@ -87,13 +92,9 @@ namespace Tanks.Architecture.GameObjects
             return new Point(-1, -1);
         }
 
-        protected static Point FindCorrectOrientation(Point thisCoords, Point playerCoords)
+        protected static int CalculateAxisDirection(int thisCoords, int playerCoords)
         {
-            return new Point
-            {
-                X = playerCoords.X - thisCoords.X > 0 ? 1 : playerCoords.X - thisCoords.X == 0 ? 0 : -1,
-                Y = playerCoords.Y - thisCoords.Y > 0 ? 1 : playerCoords.Y - thisCoords.Y == 0 ? 0 : -1,
-            };
+            return playerCoords - thisCoords > 0 ? 1 : playerCoords - thisCoords == 0 ? 0 : -1;
         }
 
         protected static Point FindNewOrientation(int x, int y)
@@ -101,10 +102,12 @@ namespace Tanks.Architecture.GameObjects
             for (var dy = -1; dy <= 1; dy++)
             for (var dx = -1; dx <= 1; dx++)
             {
-                if (dx != 0 && dy != 0) continue;
+                if (dx != 0 && dy != 0 || dx == 0 && dy == 0) continue;
+                if (Game.Rnd.Next(2) == 1) continue;
                 if (IsAbleToStep(x + dx, y + dy))
                     return new Point(dx, dy);
             }
+
             return new Point(1, 0);
         }
     }

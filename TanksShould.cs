@@ -8,16 +8,36 @@ namespace Tanks
     [TestFixture]
     internal static class TanksShould
     {
-        private const string MapWithPlayerEnemy = @"
-P E
-   
+        private const string MapWithEnemy = @"
+E  
 ";
 
-        [Test]
-        public static void ShootingTest()
+        private const string MapWithEnemyShell = @"
+S
+ 
+E
+";
+
+        private const string MapWithPlayerEnemy = @"
+E P
+";
+
+        private const string MapWithPlayerUpgradedEnemy = @"
+Y P
+";
+
+        private const string MapWithUpgradeEnemy = @"
+E U
+";
+
+        private const string MapWithWallEnemy = @"
+  
+  
+EW
+";
+
+        private static void DoActions()
         {
-            Game.CreateMap(MapWithPlayerEnemy);
-            for (var i = 0; i < 10; i++)
             for (var x = 0; x < Game.MapWidth; x++)
             for (var y = 0; y < Game.MapHeight; y++)
             {
@@ -30,22 +50,72 @@ P E
                     Game.Map[x, y] = null;
                     continue;
                 }
-                if (command.TransformTo != null && (command.DeltaX != 0 || command.DeltaY != 0) && IsInMap(x + command.DeltaX, y + command.DeltaY))
+
+                if (command.TransformTo != null && (command.DeltaX != 0 || command.DeltaY != 0) &&
+                    Game.IsInMap(x + command.DeltaX, y + command.DeltaY))
                 {
                     Game.Map[x + command.DeltaX, y + command.DeltaY] = command.TransformTo;
                     Game.Map[x, y] = null;
                 }
 
-                if (command.CreateTo != null && command.CreateTo.Orientation != new Point(0, 0) && IsInMap(x + command.CreateTo.Orientation.X, y + command.CreateTo.Orientation.Y))
+                if (command.CreateTo != null && command.CreateTo.Orientation != new Point(0, 0) &&
+                    Game.IsInMap(x + command.CreateTo.Orientation.X, y + command.CreateTo.Orientation.Y))
                     Game.Map[x + command.CreateTo.Orientation.X, y + command.CreateTo.Orientation.Y] = command.CreateTo;
             }
-
-            Assert.AreEqual(true, Game.Map[0, 0] is Enemy);
         }
 
-        private static bool IsInMap(int x, int y)
+        [Test]
+        public static void KillingTest()
         {
-            return x > -1 && y > -1 && x < Game.MapWidth && y < Game.MapHeight;
+            Game.CreateMap(MapWithEnemyShell);
+            for (var i = 0; i < 2; i++)
+                DoActions();
+            Assert.AreEqual(true, Game.Map[0, 2] == null);
+        }
+
+        [Test]
+        public static void RidingTest()
+        {
+            Game.CreateMap(MapWithEnemy);
+            for (var i = 0; i < 2; i++)
+                DoActions();
+            Assert.AreEqual(true, Game.Map[2, 0] is Enemy);
+        }
+
+        [Test]
+        public static void ShootingTest()
+        {
+            Game.CreateMap(MapWithPlayerEnemy);
+            for (var i = 0; i < 2; i++)
+                DoActions();
+            Assert.AreEqual(true, Game.Map[2, 0] is Shell);
+        }
+
+        [Test]
+        public static void UpgradedShootingTest()
+        {
+            Game.CreateMap(MapWithPlayerUpgradedEnemy);
+            for (var i = 0; i < 2; i++)
+                DoActions();
+            Assert.AreEqual(true, Game.Map[2, 0] is DoubleShell);
+        }
+
+        [Test]
+        public static void UpgradeTest()
+        {
+            Game.CreateMap(MapWithUpgradeEnemy);
+            for (var i = 0; i < 2; i++)
+                DoActions();
+            Assert.AreEqual(true, Game.Map[2, 0] is EnemyUpgraded);
+        }
+
+        [Test]
+        public static void WallTest()
+        {
+            Game.CreateMap(MapWithWallEnemy);
+            for (var i = 0; i < 2; i++)
+                DoActions();
+            Assert.AreEqual(true, Game.Map[0, 0] is Enemy);
         }
     }
 }

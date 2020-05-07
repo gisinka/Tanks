@@ -17,13 +17,5 @@ namespace Tanks.Architecture.GameObjects
         {
             return "DoubleShell.png";
         }
-
-        public override TankCommand Act(int x, int y)
-        {
-            var command = new TankCommand {DeltaX = Orientation.X, DeltaY = Orientation.Y, TransformTo = this};
-            if (Game.Map[x + Orientation.X, y + Orientation.Y] != null)
-                command.TransformTo = new Shell(Orientation);
-            return command;
-        }
     }
 }

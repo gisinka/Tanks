@@ -1,10 +1,12 @@
-﻿namespace Tanks.Architecture.GameObjects
+﻿using System.Drawing;
+
+namespace Tanks.Architecture.GameObjects
 {
-    internal class Player : Tank
+    public class Player : Tank
     {
         public override string GetImageFileName()
         {
-            return "Player.jpg";
+            return "Player.png";
         }
 
         public override int GetDrawingPriority()
@@ -17,13 +19,30 @@
             var command = new TankCommand();
             if (Game.Delta == Orientation)
             {
-                command = new TankCommand {DeltaX = Game.Delta.X, DeltaY = Game.Delta.Y, TransformTo = this};
+                if (IsAbleToStep(x + Game.Delta.X, y + Game.Delta.Y))
+                {
+                    command.DeltaX = Game.Delta.X;
+                    command.DeltaY = Game.Delta.Y;
+                    command.TransformTo = this;
+                    if (Game.Map[x + Orientation.X, y + Orientation.Y] is Upgrade)
+                        command.TransformTo = new PlayerUpgraded(Orientation);
+                }
+
+                Orientation = Game.Delta;
                 Game.Delta.X = 0;
                 Game.Delta.Y = 0;
             }
+            else if (!Game.Delta.IsEmpty)
+            {
+                Orientation = Game.Delta;
+                Game.Delta = Point.Empty;
+                command.DeltaX = 0;
+                command.DeltaY = 0;
+                command.TransformTo = this;
+            }
 
-            if (!Game.IsShoot || !IsAbleToStep(Orientation.X + x, Orientation.Y + y)) return command;
-            command.CreateTo = new Shell(Orientation);
+            if (!Game.IsShoot || !IsAbleToStep(Orientation.X + x, Orientation.Y + y) || Game.Map[Orientation.X + x, Orientation.Y + y] is Upgrade) return command;
+            command.CreateTo = Game.Shells[this.GetType()](Orientation);
             Game.IsShoot = false;
             return command;
         }
