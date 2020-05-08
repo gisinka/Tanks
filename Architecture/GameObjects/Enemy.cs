@@ -114,7 +114,9 @@ namespace Tanks.Architecture.GameObjects
         protected override bool IsAbleToStep(int x, int y)
         {
             return x > -1 && y > -1 && x < Game.MapWidth && y < Game.MapHeight &&
-                   (Game.Map[x, y] == null || Game.Map[x, y] is Upgrade) && !(Game.IsInMap(x + Orientation.X, y + Orientation.Y) && Game.Map[x + Orientation.X, y + Orientation.Y] is Enemy);
+                   (Game.Map[x, y] == null || Game.Map[x, y] is Upgrade) &&
+                   !(Game.IsInMap(x + Orientation.X, y + Orientation.Y) &&
+                     Game.Map[x + Orientation.X, y + Orientation.Y] is Enemy);
         }
     }
 }
