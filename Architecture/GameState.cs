@@ -60,7 +60,11 @@ namespace Tanks.Architecture
                 foreach (var rival in candidates)
                 {
                     if (rival != candidate && candidate.DeadInConflict(rival))
+                    {
                         aliveCandidates.Remove(candidate);
+                        if (candidate is Enemy)
+                            Game.Scores += 10;
+                    }
                     if (rival != candidate && rival.DeadInConflict(candidate))
                         aliveCandidates.Remove(rival);
                 }

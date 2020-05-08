@@ -9,16 +9,20 @@ namespace Tanks
 {
     public partial class TanksWindow : Form
     {
+        private static GameState _gameState;
         private readonly Dictionary<string, Bitmap> _bitmaps = new Dictionary<string, Bitmap>();
-        private readonly GameState _gameState;
+        private readonly ToolStripLabel _scoresLabel = new ToolStripLabel();
         private int _tickCount;
 
         public TanksWindow(DirectoryInfo imagesDirectory = null)
         {
+            InitializeComponent();
+            statusStrip.Items.Add(_scoresLabel);
+            InitializeMenu();
             _gameState = new GameState();
             ClientSize = new Size(
-                GameState.ElementSize * Game.MapWidth,
-                GameState.ElementSize * Game.MapHeight + GameState.ElementSize);
+                GameState.ElementSize * Game.MapWidth + 4 * GameState.ElementSize,
+                GameState.ElementSize * Game.MapHeight + statusStrip.Size.Height + menuStrip.Size.Height);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             if (imagesDirectory == null)
                 imagesDirectory = new DirectoryInfo("Images");
@@ -60,7 +64,7 @@ namespace Tanks
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            e.Graphics.TranslateTransform(0, GameState.ElementSize);
+            e.Graphics.TranslateTransform(2 * GameState.ElementSize, statusStrip.Size.Height + menuStrip.Size.Height);
             e.Graphics.FillRectangle(
                 Brushes.Black, 0, 0, GameState.ElementSize * Game.MapWidth,
                 GameState.ElementSize * Game.MapHeight);
@@ -83,6 +87,7 @@ namespace Tanks
                 _gameState.EndAct();
             _tickCount++;
             if (_tickCount == 8) _tickCount = 0;
+            _scoresLabel.Text = $"Scores: {Game.Scores}";
             Invalidate();
         }
 
@@ -93,6 +98,41 @@ namespace Tanks
             if (orientation == new Point(0, -1))
                 return RotateFlipType.RotateNoneFlipNone;
             return orientation == new Point(1, 0) ? RotateFlipType.Rotate90FlipNone : RotateFlipType.Rotate180FlipNone;
+        }
+
+        private void InitializeMenu()
+        {
+            toolStripMenuItem.DropDownItems.Add("Карта 1", null, Map1Click);
+            toolStripMenuItem.DropDownItems.Add("Карта 2", null, Map2Click);
+            toolStripMenuItem.DropDownItems.Add("Карта 3", null, Map3Click);
+        }
+
+        private void Map1Click(object sender, EventArgs e)
+        {
+            Game.CreateMap(Maps.FirstMap);
+            UpdateFormWithNewMap();
+        }
+
+        private void Map2Click(object sender, EventArgs e)
+        {
+            Game.CreateMap(Maps.SecondMap);
+            UpdateFormWithNewMap();
+        }
+
+        private void Map3Click(object sender, EventArgs e)
+        {
+            Game.CreateMap(Maps.ThirdMap);
+            UpdateFormWithNewMap();
+        }
+
+        private void UpdateFormWithNewMap()
+        {
+            _gameState = new GameState();
+            _gameState.BeginAct();
+            ClientSize = new Size(
+                GameState.ElementSize * Game.MapWidth + 4 * GameState.ElementSize,
+                GameState.ElementSize * Game.MapHeight + statusStrip.Size.Height + menuStrip.Size.Height);
+            Refresh();
         }
     }
 }

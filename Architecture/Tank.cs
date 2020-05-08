@@ -16,7 +16,7 @@ namespace Tanks.Architecture
         public abstract TankCommand Act(int x, int y);
         public abstract bool DeadInConflict(IGameObject conflictedObject);
 
-        protected static bool IsAbleToStep(int x, int y)
+        protected virtual bool IsAbleToStep(int x, int y)
         {
             return x > -1 && y > -1 && x < Game.MapWidth && y < Game.MapHeight &&
                    (Game.Map[x, y] == null || Game.Map[x, y] is Upgrade);

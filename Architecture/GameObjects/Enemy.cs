@@ -52,38 +52,38 @@ namespace Tanks.Architecture.GameObjects
 
         public override bool DeadInConflict(IGameObject conflictedObject)
         {
-            return conflictedObject is DoubleShell || conflictedObject is Shell;
+            return conflictedObject is DoubleShell || conflictedObject is Shell || conflictedObject is Enemy;
         }
 
-        protected static Point FindPlayer(int x, int y)
+        private static Point FindPlayer(int x, int y)
         {
-            for (var i = x; i < Game.MapWidth; i++)
+            for (var i = x + 1; i < Game.MapWidth; i++)
             {
-                if (Game.Map[i, y] is Wall || Game.Map[i, y] is Shell)
+                if (Game.Map[i, y] is Wall || Game.Map[i, y] is Shell || Game.Map[i, y] is Enemy)
                     break;
                 if (Game.Map[i, y] is Player)
                     return new Point(i, y);
             }
 
-            for (var i = x; i > -1; i--)
+            for (var i = x - 1; i > -1; i--)
             {
-                if (Game.Map[i, y] is Wall || Game.Map[i, y] is Shell)
+                if (Game.Map[i, y] is Wall || Game.Map[i, y] is Shell || Game.Map[i, y] is Enemy)
                     break;
                 if (Game.Map[i, y] is Player)
                     return new Point(i, y);
             }
 
-            for (var i = y; i < Game.MapHeight; i++)
+            for (var i = y + 1; i < Game.MapHeight; i++)
             {
-                if (Game.Map[x, i] is Wall || Game.Map[x, i] is Shell)
+                if (Game.Map[x, i] is Wall || Game.Map[x, i] is Shell || Game.Map[x, i] is Enemy)
                     break;
                 if (Game.Map[x, i] is Player)
                     return new Point(x, i);
             }
 
-            for (var i = y; i > -1; i--)
+            for (var i = y - 1; i > -1; i--)
             {
-                if (Game.Map[x, i] is Wall || Game.Map[x, i] is Shell)
+                if (Game.Map[x, i] is Wall || Game.Map[x, i] is Shell || Game.Map[x, i] is Enemy)
                     break;
                 if (Game.Map[x, i] is Player)
                     return new Point(x, i);
@@ -92,12 +92,12 @@ namespace Tanks.Architecture.GameObjects
             return new Point(-1, -1);
         }
 
-        protected static int CalculateAxisDirection(int thisCoords, int playerCoords)
+        private static int CalculateAxisDirection(int thisCoords, int playerCoords)
         {
             return playerCoords - thisCoords > 0 ? 1 : playerCoords - thisCoords == 0 ? 0 : -1;
         }
 
-        protected static Point FindNewOrientation(int x, int y)
+        private Point FindNewOrientation(int x, int y)
         {
             for (var dy = -1; dy <= 1; dy++)
             for (var dx = -1; dx <= 1; dx++)
@@ -109,6 +109,12 @@ namespace Tanks.Architecture.GameObjects
             }
 
             return new Point(1, 0);
+        }
+
+        protected override bool IsAbleToStep(int x, int y)
+        {
+            return x > -1 && y > -1 && x < Game.MapWidth && y < Game.MapHeight &&
+                   (Game.Map[x, y] == null || Game.Map[x, y] is Upgrade) && !(Game.IsInMap(x + Orientation.X, y + Orientation.Y) && Game.Map[x + Orientation.X, y + Orientation.Y] is Enemy);
         }
     }
 }

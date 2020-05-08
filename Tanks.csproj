@@ -74,6 +74,7 @@
     <Compile Include="Architecture\GameObjects\EnemyUpgraded.cs" />
     <Compile Include="Architecture\GameObjects\PlayerUpgraded.cs" />
     <Compile Include="Architecture\GameState.cs" />
+    <Compile Include="Architecture\Maps.cs" />
     <Compile Include="Architecture\Tank.cs" />
     <Compile Include="Architecture\TankAnimation.cs" />
     <Compile Include="Architecture\TankCommand.cs" />

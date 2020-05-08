@@ -9,7 +9,7 @@ namespace Tanks
         [STAThread]
         private static void Main()
         {
-            Game.CreateMap();
+            Game.CreateMap(Maps.FirstMap);
             Application.Run(new TanksWindow());
         }
     }
