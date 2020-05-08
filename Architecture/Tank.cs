@@ -18,8 +18,7 @@ namespace Tanks.Architecture
 
         protected virtual bool IsAbleToStep(int x, int y)
         {
-            return x > -1 && y > -1 && x < Game.MapWidth && y < Game.MapHeight &&
-                   (Game.Map[x, y] == null || Game.Map[x, y] is Upgrade);
+            return Game.IsInMap(x, y) && (Game.Map[x, y] == null || Game.Map[x, y] is Upgrade);
         }
     }
 }
